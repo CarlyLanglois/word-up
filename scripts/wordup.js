@@ -113,7 +113,6 @@ function render() {
     // update the score on the scoreboard
     $("#current-score").text(currentScore());
 
-    // TODO 2
     // Update the curent time remaining on the scoreboard.
     $("#time-remaining").text(model.secondsRemaining);
 
@@ -146,7 +145,7 @@ function render() {
 
     // Set the value of the textbox
     $("#textbox").val(model.currentAttempt);
-    // TODO 3
+
     // Give focus to the textbox.
     $("#textbox").focus();
 
@@ -244,6 +243,10 @@ $(document).ready(function() {
     // Add another event handler with a callback function.
     // When the textbox content changes,
     // update the .currentAttempt property of the model and re-render
+    $("#textbox").on("input", function(){
+        model.currentAttempt = $("#textbox").val();
+    });
+
 
 
     // when the form is submitted
