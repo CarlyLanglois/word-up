@@ -92,8 +92,15 @@ function checkIfWordIsReal(word) {
 
             console.log(theAnswer);
 
-            // TODO 15
             // Update the corresponding wordSubmission in the model
+            model.wordSubmissions.forEach(function(wordSubmission){
+                if (!wordSubmission.hasOwnProperty("isRealWord")){
+                    if (theAnswer){
+                        wordSubmission.isRealWord = true;
+                    } else {
+                        wordSubmission.isRealWord = false;
+                    }}});
+
 
 
             // re-render
@@ -337,10 +344,11 @@ function letterScore(letter) {
  * which is computed by summing the scores of each of its letters.
  *
  * Returns a score of 0 if the word contains any disallowed letters.
- */
+  */
+
 function wordScore(word) {
     // split the word into a list of letters
-    var letters = word.split("");
+    //var letters = word.split("");
 
     // TODO 19
     // Replace the empty list below.
@@ -350,6 +358,7 @@ function wordScore(word) {
     // return the total sum of the letter scores
     return letterScores.reduce(add, 0);
 }
+
 
 
 /**
