@@ -54,9 +54,38 @@ function addNewWordSubmission(word) {
     // TODO 21
     // replace the hardcoded 'false' with the real answer
 
+    //var alreadyUsed;
+
+    //console.log(model.wordSubmissions);
+    //console.log(model.wordSubmissions.forEach(word));
+    //console.log(model.wordSubmissions.length);
+/*
+    for (i = 0; i<model.wordSubmissions.length; i++){
+        if (model.wordSubmissions[i].word == word){
+            console.log(model.wordSubmissions[i].word);
+            console.log(model.wordSubmissions[i].word);
+            alreadyUsed = true;
+        } else{
+            console.log(word);
+            alreadyUsed = false;
+        }
+    }
+
+    */
+    var alreadyUsed = false;
+
+    model.wordSubmissions.forEach(function(submission){
+        if (submission.word == word){
+            alreadyUsed = true;
+        }
+    })
+
+
+
 
     // if the word is valid and hasn't already been used, add it
-    if (containsOnlyAllowedLetters(word) /*&& alreadyUsed == false*/) {
+    if (containsOnlyAllowedLetters(word) && alreadyUsed == false) {
+        console.log(model.wordSubmissions)
         model.wordSubmissions.push({ word: word });
         // and now we must also determine whether this is actually a real word
         checkIfWordIsReal(word);
@@ -90,7 +119,7 @@ function checkIfWordIsReal(word) {
                 theAnswer = false;
             }
 
-            console.log(theAnswer);
+            //console.log(theAnswer);
 
             // Update the corresponding wordSubmission in the model
             model.wordSubmissions.forEach(function(wordSubmission){
@@ -100,6 +129,9 @@ function checkIfWordIsReal(word) {
                     } else {
                         wordSubmission.isRealWord = false;
                     }}});
+
+            console.log(model.wordSubmissions[0].word);
+            //model.wordSubmissions.forEach(console.log(wordSubmission));
 
 
 
@@ -215,15 +247,19 @@ function wordSubmissionChip(wordSubmission) {
 
     // if we know the status of this word (real word or not), then add a green score or red X
     if (wordSubmission.hasOwnProperty("isRealWord")) {
-        var scoreChip = $("<span></span>").text("⟐");
-        // TODO 17
+
+        var scoreChip;
+
         // give the scoreChip appropriate text content
+        if (wordSubmission.isRealWord){
+            scoreChip = $("<span class='tag tag-sm tag-primary'></span>").text(wordScore(wordSubmission.word));
+        } else {
+            scoreChip = $("<span class='tag tag-sm tag-danger'></span>").text("X");
+        };
 
-        // TODO 18
-        // give the scoreChip appropriate css classes
 
-        // TODO 16
         // append scoreChip into wordChip
+        wordChip.append(scoreChip);
 
     }
 
@@ -308,7 +344,7 @@ function isDisallowedLetter(letter) {
  * Note that the list might be empty, if it contains only allowed letters.
  */
 function disallowedLettersInWord(word) {
-    letters = word.split("");
+    var letters = word.split("");
     return letters.filter(isDisallowedLetter);
 }
 
@@ -319,7 +355,7 @@ function disallowedLettersInWord(word) {
 function containsOnlyAllowedLetters(word) {
     if (disallowedLettersInWord(word) == ""){
         return true;
-    } else{
+    } else {
         return false;
     }
 }
@@ -348,16 +384,26 @@ function letterScore(letter) {
 
 function wordScore(word) {
     // split the word into a list of letters
-    //var letters = word.split("");
+
+    lettersArray = word.split("");
+
+    //console.log(lettersArray);
 
     // TODO 19
     // Replace the empty list below.
     // Map the list of letters into a list of scores, one for each letter.
-    var letterScores = [];
+    var letterScores = lettersArray.map(function(letter){
+        return letterScore(letter);
+    });
+
+    //console.log(letterScores);
+
 
     // return the total sum of the letter scores
     return letterScores.reduce(add, 0);
+
 }
+
 
 
 
@@ -378,7 +424,7 @@ function currentScore() {
 
     // TODO 20
     // return the total sum of the word scores
-    return 0;
+    return wordScores.reduce(add, 0);
 }
 
 
